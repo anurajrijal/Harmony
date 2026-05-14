@@ -20,7 +20,8 @@ export default function ServerSelect() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const INVITE_URL = `https://discord.com/api/oauth2/authorize?client_id=${import.meta.env.VITE_DISCORD_CLIENT_ID}&permissions=8&scope=bot%20applications.commands`;
+  const CLIENT_ID = import.meta.env.VITE_DISCORD_CLIENT_ID || '1504152422153715832';
+  const INVITE_URL = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&permissions=8&scope=bot%20applications.commands`;
 
   useEffect(() => {
     fetchGuilds();
