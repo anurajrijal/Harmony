@@ -14,7 +14,8 @@ console.log('🛡️ [Audio] Identity Masking & SoundCloud Protocol active');
 if (!ffmpeg) {
   console.warn('⚠️ [Audio] FFmpeg binary not found in static bundle. Audio may fail.');
 } else {
-  console.log('🎙️ [Audio] Acoustic Engine initialized (FFmpeg Static)');
+  process.env.FFMPEG_PATH = ffmpeg;
+  console.log('🎙️ [Audio] Acoustic Engine initialized (FFmpeg Static) at ' + ffmpeg);
 }
 
 const client = new Client({
