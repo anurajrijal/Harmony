@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '',
+  baseURL: import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3001' : 'https://harmony-backend-t72j.onrender.com'),
   withCredentials: true,
   headers: {
     'Cache-Control': 'no-cache',
@@ -31,7 +31,8 @@ api.interceptors.response.use(
         const refreshToken = localStorage.getItem('refreshToken');
         if (!refreshToken) throw new Error('No refresh token');
         
-        const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/auth/refresh`, { refreshToken });
+        const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3001' : 'https://harmony-backend-t72j.onrender.com');
+        const res = await axios.post(`${baseURL}/auth/refresh`, { refreshToken });
         const { accessToken, refreshToken: newRefresh } = res.data;
         
         localStorage.setItem('accessToken', accessToken);

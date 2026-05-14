@@ -23,7 +23,8 @@ export default function LoginPage() {
   }, [user, loading, navigate]);
 
   const handleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/auth/discord`;
+    const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3001' : 'https://harmony-backend-t72j.onrender.com');
+    window.location.href = `${baseURL}/auth/discord`;
   };
 
   return (
