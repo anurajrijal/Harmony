@@ -139,4 +139,14 @@ client.on('error', console.error);
 process.on('unhandledRejection', console.error);
 client.login(process.env.DISCORD_BOT_TOKEN).catch(console.error);
 
+// Dummy HTTP server to satisfy Render's port binding requirement if deployed as a Web Service
+const http = require('http');
+const port = process.env.PORT || process.env.BOT_PORT || 3002;
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Discord Bot is running natively.');
+}).listen(port, () => {
+  console.log(`🌐 Dummy web server listening on port ${port} to satisfy Render port scan`);
+});
+
 module.exports = client;
