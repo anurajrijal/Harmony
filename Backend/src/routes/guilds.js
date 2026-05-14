@@ -17,7 +17,10 @@ router.get('/', authenticate, async (req, res) => {
         });
         
         const managedGuilds = discordRes.data
-          .filter(g => (g.permissions & 0x20) === 0x20 || (g.permissions & 0x8) === 0x8 || g.owner)
+          .filter(g => {
+            const perms = BigInt(g.permissions);
+            return (perms & 0x20n) === 0x20n || (perms & 0x8n) === 0x8n || g.owner;
+          })
           .map(g => g.id);
 
         console.log(`[Sync] Found ${managedGuilds.length} managed guilds from Discord for ${req.user.username}`);

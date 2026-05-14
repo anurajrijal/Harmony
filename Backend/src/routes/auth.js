@@ -60,7 +60,10 @@ router.get('/discord/callback', authLimiter, async (req, res) => {
     const discordUser = userRes.data;
     // Filter guilds where user has MANAGE_GUILD (0x20) or ADMINISTRATOR (0x8) permission or is owner
     const managedGuilds = guildsRes.data
-      .filter(g => (g.permissions & 0x20) === 0x20 || (g.permissions & 0x8) === 0x8 || g.owner)
+      .filter(g => {
+        const perms = BigInt(g.permissions);
+        return (perms & 0x20n) === 0x20n || (perms & 0x8n) === 0x8n || g.owner;
+      })
       .map(g => g.id);
 
     // Upsert user

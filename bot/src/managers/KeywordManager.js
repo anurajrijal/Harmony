@@ -66,21 +66,35 @@ class KeywordManager {
       if (Date.now() - lastUsed < (rule.cooldown || 5) * 1000) continue;
       this.cooldowns.set(cooldownKey, Date.now());
 
+      // Replace @username with actual user ping
+      let responseText = rule.response || '';
+      responseText = responseText.replace(/@username/gi, `<@${message.author.id}>`);
+
       // Send response
       try {
+        const allowedMentions = { parse: ['users', 'roles', 'everyone'] };
+        
         if (rule.responseType === 'embed' && rule.embedData) {
+          let embedDesc = rule.embedData.description || responseText;
+          embedDesc = embedDesc.replace(/@username/gi, `<@${message.author.id}>`);
+          
           await message.reply({
+            content: responseText !== rule.response ? responseText : undefined, // Include parsed text outside embed if modified
             embeds: [{
               title: rule.embedData.title,
-              description: rule.embedData.description || rule.response,
+              description: embedDesc,
               color: parseInt(rule.embedData.color?.replace('#', '') || '5865F2', 16),
               footer: rule.embedData.footer ? { text: rule.embedData.footer } : undefined,
               thumbnail: rule.embedData.thumbnail ? { url: rule.embedData.thumbnail } : undefined,
               image: rule.embedData.image ? { url: rule.embedData.image } : undefined,
             }],
+            allowedMentions
           });
         } else {
-          await message.reply(rule.response);
+          await message.reply({
+            content: responseText,
+            allowedMentions
+          });
         }
 
         // Log the auto-reply
