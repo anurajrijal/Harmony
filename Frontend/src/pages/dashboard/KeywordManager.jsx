@@ -146,7 +146,8 @@ export default function KeywordManager() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
                 whileHover={{ y: -8, backgroundColor: 'rgba(255,255,255,0.02)' }}
-                className={`bg-[#0b0c10]/40 backdrop-blur-xl border ${kw.enabled ? 'border-white/5' : 'border-red-500/10 opacity-60'} rounded-xl p-10 min-h-[260px] flex flex-col relative overflow-hidden transition-all group`}
+                className={`bg-[#0b0c10]/40 backdrop-blur-xl border ${kw.enabled ? 'border-white/5' : 'border-red-500/10 opacity-60'} rounded-xl min-h-[260px] flex flex-col relative transition-all group`}
+                style={{ padding: '2.5rem' }}
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-discord/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
