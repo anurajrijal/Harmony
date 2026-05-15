@@ -458,6 +458,90 @@ class MusicManager {
       isPlaying: queue?.isPlaying || false,
     });
   }
+
+  async listPlaylists(interaction) {
+    try {
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const res = await axios.get(`${backendUrl}/api/playlists?guildId=${interaction.guildId}`, {
+        headers: { 'x-bot-api-key': process.env.BOT_API_KEY }
+      });
+      if (res.data.success) {
+        const playlists = res.data.playlists;
+        if (!playlists.length) return interaction.reply('📭 No playlists found for this server.');
+        
+        const description = playlists.map((p, i) => `**${i + 1}. ${p.name}** (${p.tracks.length} tracks)`).join('\n');
+        await interaction.reply({ embeds: [{ title: '📑 Server Playlists', description, color: 0x5865F2 }] });
+      } else {
+        await interaction.reply({ content: '❌ Failed to fetch playlists', ephemeral: true });
+      }
+    } catch (err) {
+      console.error('[Music] listPlaylists error:', err.message);
+      await interaction.reply({ content: '❌ Error fetching playlists', ephemeral: true });
+    }
+  }
+
+  async playPlaylistCommand(interaction) {
+    const name = interaction.options.getString('name');
+    const member = interaction.member;
+    const voiceChannel = member.voice.channel;
+    
+    if (!voiceChannel) {
+      return interaction.reply({ content: '❌ Join a voice channel first!', ephemeral: true });
+    }
+
+    try {
+      await interaction.deferReply();
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const res = await axios.get(`${backendUrl}/api/playlists?guildId=${interaction.guildId}`, {
+        headers: { 'x-bot-api-key': process.env.BOT_API_KEY }
+      });
+      
+      if (!res.data.success) return interaction.editReply('❌ Failed to fetch playlists');
+      
+      const playlist = res.data.playlists.find(p => p.name.toLowerCase() === name.toLowerCase());
+      if (!playlist) return interaction.editReply(`❌ Playlist **${name}** not found.`);
+      if (!playlist.tracks.length) return interaction.editReply(`📭 Playlist **${name}** is empty.`);
+
+      const queue = this.getQueue(interaction.guildId);
+      
+      playlist.tracks.forEach(track => {
+        queue.tracks.push({
+          title: track.title,
+          url: track.url,
+          duration: track.duration || '0:00',
+          thumbnail: track.thumbnail,
+          requestedBy: member.user.username,
+          isSpotify: track.isSpotify || false
+        });
+      });
+
+      queue.textChannelId = interaction.channelId;
+
+      if (!queue.connection) {
+        queue.connection = joinVoiceChannel({
+          channelId: voiceChannel.id,
+          guildId: interaction.guildId,
+          adapterCreator: interaction.guild.voiceAdapterCreator,
+          selfDeaf: true,
+        });
+        queue.connection.on('stateChange', (oldState, newState) => {
+          console.log(`[Voice] Protocol State: ${oldState.status} -> ${newState.status}`);
+        });
+        queue.connection.subscribe(queue.player);
+        this._setupPlayerEvents(interaction.guildId);
+      }
+
+      if (!queue.isPlaying) {
+        await this._playTrack(interaction.guildId);
+      }
+
+      this._emitQueueUpdate(interaction.guildId);
+      await interaction.editReply(`🎵 Added **${playlist.tracks.length} tracks** from playlist **${playlist.name}** to deck!`);
+    } catch (err) {
+      console.error('[Music] playPlaylistCommand error:', err.message);
+      await interaction.editReply('❌ Error playing playlist');
+    }
+  }
 }
 
 module.exports = MusicManager;

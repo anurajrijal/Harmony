@@ -102,6 +102,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
       case 'skip': await musicManager.skip(interaction.guildId); await interaction.reply('⏭️ Skipped'); break;
       case 'stop': musicManager.stop(interaction.guildId); await interaction.reply('⏹️ Stopped and cleared queue'); break;
       case 'queue': await musicManager.showQueue(interaction); break;
+      case 'playlist':
+        if (interaction.options.getSubcommand() === 'list') {
+          await musicManager.listPlaylists(interaction);
+        } else if (interaction.options.getSubcommand() === 'play') {
+          await musicManager.playPlaylistCommand(interaction);
+        }
+        break;
       case 'volume':
         const vol = interaction.options.getInteger('level');
         musicManager.setVolume(interaction.guildId, vol);
@@ -113,7 +120,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           description: 'Synthesizing available command protocols for this sector.',
           color: 0x5865F2,
           fields: [
-            { name: '🎵 Acoustic Studio', value: '`/play`, `/pause`, `/resume`, `/skip`, `/stop`, `/queue`, `/volume`' },
+            { name: '🎵 Acoustic Studio', value: '`/play`, `/pause`, `/resume`, `/skip`, `/stop`, `/queue`, `/volume`, `/playlist list`, `/playlist play`' },
             { name: '🧠 Intelligence Hub', value: 'Auto-replies are active. Manage keywords via the [Dashboard](http://localhost:5173).' },
             { name: '🔒 Security HQ', value: 'Reaction roles and automation are active. Manage via the dashboard.' }
           ],

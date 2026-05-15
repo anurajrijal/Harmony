@@ -21,6 +21,8 @@ const categories = [
       { name: '/resume', desc: 'Resume the paused playback', usage: '/resume' },
       { name: '/queue', desc: 'Show all upcoming songs in the queue', usage: '/queue' },
       { name: '/volume', desc: 'Adjust the volume level (0-100)', usage: '/volume [0-100]' },
+      { name: '/playlist list', desc: 'View all saved playlists for this server', usage: '/playlist list' },
+      { name: '/playlist play', desc: 'Add an entire playlist to the queue', usage: '/playlist play [name]' },
     ]
   },
   { 

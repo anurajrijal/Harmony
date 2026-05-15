@@ -104,8 +104,8 @@ export default function Greetings() {
               <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Target Channel</label>
               <CustomSelect
                 options={channelOptions}
-                value={channelOptions.find(c => c.value === config.welcomeChannelId)}
-                onChange={(option) => setConfig({ ...config, welcomeChannelId: option?.value || '' })}
+                value={config.welcomeChannelId}
+                onChange={(value) => setConfig({ ...config, welcomeChannelId: value || '' })}
                 placeholder="Select a channel"
               />
             </div>
@@ -133,8 +133,8 @@ export default function Greetings() {
               <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Target Channel</label>
               <CustomSelect
                 options={channelOptions}
-                value={channelOptions.find(c => c.value === config.goodbyeChannelId)}
-                onChange={(option) => setConfig({ ...config, goodbyeChannelId: option?.value || '' })}
+                value={config.goodbyeChannelId}
+                onChange={(value) => setConfig({ ...config, goodbyeChannelId: value || '' })}
                 placeholder="Select a channel"
               />
             </div>
@@ -187,19 +187,21 @@ export default function Greetings() {
         </div>
         
         {/* Preview Container */}
-        <div className="mt-8 rounded-2xl overflow-hidden border border-white/10 aspect-[8/3] max-w-3xl mx-auto relative bg-gray-900 group">
-           <img src={config.backgroundImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Background Preview" />
-           <div className="absolute inset-0 bg-black/40" />
-           <div className="absolute inset-0 flex items-center p-8 gap-8">
-              <div className="w-32 h-32 rounded-full bg-discord border-4 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>
-                 <img src="https://cdn.discordapp.com/embed/avatars/0.png" className="w-full h-full object-cover" alt="Avatar" />
-              </div>
-              <div className="flex flex-col gap-2">
-                 <h2 className="text-3xl font-bold tracking-widest drop-shadow-lg" style={{ color: config.textColor }}>WELCOME TO THE SERVER</h2>
-                 <h1 className="text-5xl font-black tracking-wider drop-shadow-xl" style={{ color: config.textColor }}>USER</h1>
-                 <p className="text-2xl font-medium tracking-wider drop-shadow-md opacity-90" style={{ color: config.textColor }}>Member #123</p>
-              </div>
-           </div>
+        <div className="mt-8 overflow-x-auto w-full custom-scrollbar pb-4">
+          <div className="rounded-2xl overflow-hidden border border-white/10 w-[800px] h-[300px] mx-auto relative bg-gray-900 group shrink-0">
+             <img src={config.backgroundImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Background Preview" />
+             <div className="absolute inset-0 bg-black/40" />
+             <div className="absolute inset-0 flex items-center p-12 gap-8">
+                <div className="w-[150px] h-[150px] rounded-full bg-discord border-4 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>
+                   <img src="https://cdn.discordapp.com/embed/avatars/0.png" className="w-full h-full object-cover" alt="Avatar" />
+                </div>
+                <div className="flex flex-col gap-2">
+                   <h2 className="text-4xl font-bold tracking-widest drop-shadow-lg" style={{ color: config.textColor }}>WELCOME TO THE SERVER</h2>
+                   <h1 className="text-5xl font-black tracking-wider drop-shadow-xl" style={{ color: config.textColor }}>USER</h1>
+                   <p className="text-2xl font-medium tracking-wider drop-shadow-md opacity-90" style={{ color: config.textColor }}>Member #123</p>
+                </div>
+             </div>
+          </div>
         </div>
       </div>
     </motion.div>

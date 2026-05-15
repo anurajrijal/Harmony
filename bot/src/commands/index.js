@@ -11,6 +11,10 @@ const commands = [
   new SlashCommandBuilder().setName('volume').setDescription('Set volume')
     .addIntegerOption(opt => opt.setName('level').setDescription('Volume 0-100').setRequired(true).setMinValue(0).setMaxValue(100)),
   new SlashCommandBuilder().setName('help').setDescription('View available forensic commands'),
+  new SlashCommandBuilder().setName('playlist').setDescription('Manage and play your server playlists')
+    .addSubcommand(sub => sub.setName('list').setDescription('Show all playlists for this server'))
+    .addSubcommand(sub => sub.setName('play').setDescription('Play a playlist')
+      .addStringOption(opt => opt.setName('name').setDescription('Name of the playlist to play').setRequired(true))),
 ];
 
 async function registerCommands(client) {
