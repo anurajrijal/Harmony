@@ -48,6 +48,7 @@ class GreetingManager {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // 3. Draw Avatar
+    ctx.save(); // Save state before clipping
     const avatarSize = 150;
     const avatarX = 50;
     const avatarY = (canvas.height / 2) - (avatarSize / 2);
@@ -61,7 +62,7 @@ class GreetingManager {
     const avatar = await loadImage(avatarUrl);
     ctx.drawImage(avatar, avatarX, avatarY, avatarSize, avatarSize);
     
-    // Restore clipping
+    // Restore state to remove clipping
     ctx.restore();
     
     // Add border to avatar
