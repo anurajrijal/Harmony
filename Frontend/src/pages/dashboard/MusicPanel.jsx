@@ -102,8 +102,16 @@ export default function MusicPanel() {
   const fetchQueue = async () => {
     try {
       const res = await api.get(`/api/music/queue/${guildId}`);
-      if (res.data.queue) setQueue(res.data.queue);
-    } catch {}
+      if (res.data.queue) {
+        setQueue({
+          tracks: res.data.queue.tracks || [],
+          currentIndex: res.data.queue.currentIndex ?? 0,
+          isPlaying: res.data.queue.isPlaying || false
+        });
+      }
+    } catch (err) {
+      console.error("Queue fetch failed", err);
+    }
   };
 
   const sendControl = async (action, data = {}) => {
@@ -123,7 +131,8 @@ export default function MusicPanel() {
     setLoading(false);
   };
 
-  const currentTrack = queue.tracks?.[queue.currentIndex];
+  const currentTrack = queue.tracks?.[queue.currentIndex] || (queue.tracks?.length > 0 ? queue.tracks[0] : null);
+  const isActuallyPlaying = queue.isPlaying && !!currentTrack;
 
   return (
     <div className="flex flex-col gap-8">

@@ -11,7 +11,7 @@ const trackSchema = new mongoose.Schema({
 const musicQueueSchema = new mongoose.Schema({
   guildId: { type: String, required: true, unique: true },
   tracks: [trackSchema],
-  currentTrack: { type: Number, default: 0 },
+  currentIndex: { type: Number, default: 0 },
   isPlaying: { type: Boolean, default: false },
   isPaused: { type: Boolean, default: false },
   volume: { type: Number, default: 50 },
