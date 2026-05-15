@@ -304,52 +304,26 @@ export default function Greetings() {
           </div>
         </div>
       </div>
-            <div className="flex items-center gap-4">
-              <input
-                type="color"
-                value={config.textColor}
-                onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
-                className="w-12 h-12 rounded-xl border border-white/10 bg-transparent cursor-pointer"
-              />
-              <input
-                type="text"
-                value={config.textColor}
-                onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
-                className="flex-1 bg-[#050608] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-discord transition-all shadow-inner"
-              />
+      </div>
+      
+      {/* Preview Container */}
+      <div className="mt-8 overflow-x-auto w-full custom-scrollbar pb-4">
+        <div className="rounded-2xl overflow-hidden border border-white/10 w-[800px] h-[300px] mx-auto relative bg-gray-900 group shrink-0">
+          <img 
+            src={config.welcomeImage} 
+            className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" 
+            alt="Background Preview" 
+          />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 flex items-center p-12 gap-8">
+            <div className="w-[150px] h-[150px] rounded-full bg-discord border-4 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>
+              <img src="https://cdn.discordapp.com/embed/avatars/0.png" className="w-full h-full object-cover" alt="Avatar" />
             </div>
-          </div>
-        </div>
-        
-        <div className="p-6 bg-discord/5 rounded-2xl border border-discord/10 mt-6">
-          <label className="flex items-center cursor-pointer gap-4">
-            <div className="relative">
-              <input type="checkbox" className="sr-only" checked={config.useGifMode} onChange={(e) => setConfig({ ...config, useGifMode: e.target.checked })} />
-              <div className={`block w-14 h-8 rounded-full transition-colors ${config.useGifMode ? 'bg-discord' : 'bg-gray-700'}`}></div>
-              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform ${config.useGifMode ? 'transform translate-x-6' : ''}`}></div>
+            <div className="flex flex-col gap-2">
+              <h2 className="text-2xl font-bold tracking-widest drop-shadow-lg" style={{ color: config.textColor }}>WELCOME TO THE SERVER</h2>
+              <h1 className="text-4xl font-black tracking-wider drop-shadow-xl" style={{ color: config.textColor }}>USER</h1>
+              <p className="text-xl font-medium tracking-wider drop-shadow-md opacity-90" style={{ color: config.textColor }}>Member #123</p>
             </div>
-            <div>
-              <span className="text-sm font-bold uppercase tracking-widest text-white">Animated GIF Backgrounds</span>
-              <p className="text-[10px] text-gray-400 mt-1 italic">Enable this to support .gif files. Your card will become a thumbnail while the GIF plays in full!</p>
-            </div>
-          </label>
-        </div>
-        
-        {/* Preview Container */}
-        <div className="mt-8 overflow-x-auto w-full custom-scrollbar pb-4">
-          <div className="rounded-2xl overflow-hidden border border-white/10 w-[800px] h-[300px] mx-auto relative bg-gray-900 group shrink-0">
-             <img src={config.backgroundImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Background Preview" />
-             <div className="absolute inset-0 bg-black/40" />
-             <div className="absolute inset-0 flex items-center p-12 gap-8">
-                <div className="w-[150px] h-[150px] rounded-full bg-discord border-4 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>
-                   <img src="https://cdn.discordapp.com/embed/avatars/0.png" className="w-full h-full object-cover" alt="Avatar" />
-                </div>
-                <div className="flex flex-col gap-2">
-                   <h2 className="text-2xl font-bold tracking-widest drop-shadow-lg" style={{ color: config.textColor }}>WELCOME TO THE SERVER</h2>
-                   <h1 className="text-4xl font-black tracking-wider drop-shadow-xl" style={{ color: config.textColor }}>USER</h1>
-                   <p className="text-xl font-medium tracking-wider drop-shadow-md opacity-90" style={{ color: config.textColor }}>Member #123</p>
-                </div>
-             </div>
           </div>
         </div>
       </div>
