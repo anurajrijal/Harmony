@@ -4,6 +4,8 @@ import api from '../../utils/api.js';
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import CustomSelect from '../../components/CustomSelect';
+import { HiPhoto, HiTrash, HiCloudArrowUp } from 'react-icons/hi2';
+import { useRef } from 'react';
 
 
 export default function Greetings() {
@@ -52,6 +54,38 @@ export default function Greetings() {
     };
     fetchData();
   }, [guildId]);
+
+  const fileInputRef = useRef(null);
+
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      return toast.error('File too large (Max 10MB)');
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const uploadToast = toast.loading('Uploading signal...');
+    try {
+      const res = await api.post('/api/upload/greeting', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data.success) {
+        setConfig({ ...config, backgroundImage: res.data.url });
+        toast.success('Asset uploaded successfully', { id: uploadToast });
+      }
+    } catch (err) {
+      toast.error('Upload interference detected', { id: uploadToast });
+    }
+  };
+
+  const removeImage = () => {
+    setConfig({ ...config, backgroundImage: '' });
+    toast.success('Visual asset removed');
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -167,14 +201,33 @@ export default function Greetings() {
         <h2 className="text-2xl font-bold text-white mb-6">Card Visuals</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Background Image URL</label>
-            <input
-              type="text"
-              value={config.backgroundImage}
-              onChange={(e) => setConfig({ ...config, backgroundImage: e.target.value })}
-              className="w-full bg-[#050608] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-discord transition-all shadow-inner"
-              placeholder="https://example.com/image.png"
-            />
+            <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Background Visual (URL or Upload)</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={config.backgroundImage}
+                onChange={(e) => setConfig({ ...config, backgroundImage: e.target.value })}
+                className="flex-1 bg-[#050608] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-discord transition-all shadow-inner"
+                placeholder="https://example.com/image.png"
+              />
+              <input type="file" ref={fileInputRef} onChange={handleUpload} className="hidden" accept="image/*,.gif" />
+              <button 
+                onClick={() => fileInputRef.current.click()}
+                className="px-4 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                title="Upload Image"
+              >
+                <HiCloudArrowUp className="text-xl" />
+              </button>
+              {config.backgroundImage && (
+                <button 
+                  onClick={removeImage}
+                  className="px-4 bg-red-500/5 border border-red-500/10 rounded-xl text-red-500/60 hover:text-red-500 hover:bg-red-500/10 transition-all"
+                  title="Remove Image"
+                >
+                  <HiTrash className="text-xl" />
+                </button>
+              )}
+            </div>
           </div>
           <div>
             <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Text Color</label>

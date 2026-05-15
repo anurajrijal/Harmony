@@ -28,6 +28,8 @@ const logRoutes = require("./routes/logs");
 const settingsRoutes = require("./routes/settings");
 const playlistRoutes = require("./routes/playlists");
 const greetingRoutes = require("./routes/greetings");
+const uploadRoutes = require("./routes/upload");
+const path = require("path");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -65,6 +67,7 @@ app.use(morgan("dev"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/", apiLimiter);
 
 // Routes
@@ -77,6 +80,7 @@ app.use("/api/logs", logRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/playlists", playlistRoutes);
 app.use("/api/greetings", greetingRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Health check
 app.get("/health", (req, res) => {

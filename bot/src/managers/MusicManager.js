@@ -12,11 +12,18 @@ class MusicManager {
 
   async _initPlayDL() {
     try {
+      // play-dl 1.9+ handles client_id internally if getFreeClientID is called
       const client_id = await play.getFreeClientID();
-      await play.setToken({ soundcloud: { client_id } });
-      console.log('✅ [Music] SoundCloud Client ID successfully configured for fallback.');
+      if (client_id) {
+        await play.setToken({
+          soundcloud: {
+            client_id: client_id
+          }
+        });
+        console.log('✅ [Music] SoundCloud integration active.');
+      }
     } catch (err) {
-      console.warn('⚠️ [Music] Failed to fetch SoundCloud Client ID:', err.message);
+      console.warn('⚠️ [Music] SoundCloud Handshake Failure:', err.message);
     }
   }
 
@@ -328,8 +335,11 @@ class MusicManager {
         stream = await play.stream(streamUrl);
       } else {
         console.log(`☁️ [Music] YouTube Signal detected: ${streamUrl}`);
-        const info = await play.video_info(streamUrl);
-        stream = await play.stream_from_info(info);
+        // Use direct stream for YouTube to bypass some info-gathering blockade triggers
+        stream = await play.stream(streamUrl, { 
+          quality: 0, // 0 is highest audio, 1 is medium, 2 is lowest
+          discordPlayerCompatibility: true
+        });
       }
       
       const resource = createAudioResource(stream.stream, { 
