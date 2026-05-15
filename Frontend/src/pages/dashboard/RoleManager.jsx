@@ -105,7 +105,7 @@ export default function RoleManager() {
       {/* Controls */}
       <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
         <div className="relative flex-1 group">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-5 pointer-events-none">
             <HiMagnifyingGlass className="text-gray-600 text-lg" />
           </div>
           <input 
@@ -113,7 +113,8 @@ export default function RoleManager() {
             placeholder="Search Security Database..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full h-14 bg-[#0b0c10]/60 border border-white/10 rounded-xl pl-12 pr-5 text-[13px] font-bold text-white placeholder-gray-600 focus:outline-none focus:border-green-500/70 focus:bg-[#0b0c10] transition-all shadow-inner"
+            className="w-full h-14 bg-[#0b0c10]/60 border border-white/10 rounded-xl pl-5 pr-12 text-[13px] font-bold text-white placeholder-gray-600 focus:outline-none focus:border-green-500/70 focus:bg-[#0b0c10] transition-all shadow-inner block"
+            style={{ lineHeight: '56px' }}
           />
         </div>
       </div>

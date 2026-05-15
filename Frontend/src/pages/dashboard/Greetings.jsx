@@ -25,18 +25,27 @@ export default function Greetings() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [channelsRes, configRes] = await Promise.all([
-          axios.get(`${API}/api/guilds/${guildId}/channels`, { withCredentials: true }),
-          axios.get(`${API}/api/greetings?guildId=${guildId}`, { withCredentials: true })
-        ]);
-        if (channelsRes.data.success) {
-          setChannels(channelsRes.data.channels.filter(c => c.type === 0)); // Text channels
+        // Fetch channels safely
+        try {
+          const channelsRes = await axios.get(`${API}/api/guilds/${guildId}/channels`, { withCredentials: true });
+          if (channelsRes.data.success) {
+            setChannels(channelsRes.data.channels.filter(c => c.type === 0)); // Text channels
+          }
+        } catch (err) {
+          console.error("Failed to load channels", err);
+          toast.error('Failed to load server channels');
         }
-        if (configRes.data.success && configRes.data.config) {
-          setConfig(prev => ({ ...prev, ...configRes.data.config }));
+
+        // Fetch greetings safely
+        try {
+          const configRes = await axios.get(`${API}/api/greetings?guildId=${guildId}`, { withCredentials: true });
+          if (configRes.data.success && configRes.data.config) {
+            setConfig(prev => ({ ...prev, ...configRes.data.config }));
+          }
+        } catch (err) {
+          console.error("Failed to load greetings", err);
+          toast.error('Failed to load greetings data (Check if backend is running)');
         }
-      } catch (err) {
-        toast.error('Failed to load greetings data');
       } finally {
         setLoading(false);
       }
