@@ -19,9 +19,11 @@ export default function Greetings() {
     welcomeMessage: 'Welcome to the server, @user!',
     goodbyeChannelId: '',
     goodbyeMessage: '@user has left the server.',
-    backgroundImage: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop',
+    welcomeImage: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop',
+    goodbyeImage: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop',
     textColor: '#FFFFFF',
-    useGifMode: false,
+    welcomeGifMode: false,
+    goodbyeGifMode: false,
   });
 
   useEffect(() => {
@@ -55,9 +57,10 @@ export default function Greetings() {
     fetchData();
   }, [guildId]);
 
-  const fileInputRef = useRef(null);
+  const welcomeInputRef = useRef(null);
+  const leftInputRef = useRef(null);
 
-  const handleUpload = async (e) => {
+  const handleUpload = async (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -68,13 +71,13 @@ export default function Greetings() {
     const formData = new FormData();
     formData.append('image', file);
 
-    const uploadToast = toast.loading('Uploading signal...');
+    const uploadToast = toast.loading(`Uploading ${type} asset...`);
     try {
       const res = await api.post('/api/upload/greeting', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (res.data.success) {
-        setConfig({ ...config, backgroundImage: res.data.url });
+        setConfig({ ...config, [type === 'welcome' ? 'welcomeImage' : 'goodbyeImage']: res.data.url });
         toast.success('Asset uploaded successfully', { id: uploadToast });
       }
     } catch (err) {
@@ -82,9 +85,9 @@ export default function Greetings() {
     }
   };
 
-  const removeImage = () => {
-    setConfig({ ...config, backgroundImage: '' });
-    toast.success('Visual asset removed');
+  const removeImage = (type) => {
+    setConfig({ ...config, [type === 'welcome' ? 'welcomeImage' : 'goodbyeImage']: '' });
+    toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} asset removed`);
   };
 
   const handleSave = async () => {
@@ -197,40 +200,110 @@ export default function Greetings() {
       </div>
 
       {/* Visual Customization */}
-      <div className="bg-[#0B0D12] p-8 rounded-xl border border-white/5 shadow-2xl space-y-6">
-        <h2 className="text-2xl font-bold text-white mb-6">Card Visuals</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Background Visual (URL or Upload)</label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={config.backgroundImage}
-                onChange={(e) => setConfig({ ...config, backgroundImage: e.target.value })}
-                className="flex-1 bg-[#050608] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-discord transition-all shadow-inner"
-                placeholder="https://example.com/image.png"
-              />
-              <input type="file" ref={fileInputRef} onChange={handleUpload} className="hidden" accept="image/*,.gif" />
-              <button 
-                onClick={() => fileInputRef.current.click()}
-                className="px-4 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all"
-                title="Upload Image"
-              >
-                <HiCloudArrowUp className="text-xl" />
-              </button>
-              {config.backgroundImage && (
+      <div className="bg-[#0B0D12] p-8 rounded-xl border border-white/5 shadow-2xl space-y-12">
+        <div>
+          <h2 className="text-2xl font-bold text-white mb-6">Welcome Visuals</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Background Visual (URL or Upload)</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={config.welcomeImage}
+                  onChange={(e) => setConfig({ ...config, welcomeImage: e.target.value })}
+                  className="flex-1 bg-[#050608] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-discord transition-all shadow-inner"
+                  placeholder="https://example.com/welcome.png"
+                />
+                <input type="file" ref={welcomeInputRef} onChange={(e) => handleUpload(e, 'welcome')} className="hidden" accept="image/*,.gif" />
                 <button 
-                  onClick={removeImage}
-                  className="px-4 bg-red-500/5 border border-red-500/10 rounded-xl text-red-500/60 hover:text-red-500 hover:bg-red-500/10 transition-all"
-                  title="Remove Image"
+                  onClick={() => welcomeInputRef.current.click()}
+                  className="px-4 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                  title="Upload Image"
                 >
-                  <HiTrash className="text-xl" />
+                  <HiCloudArrowUp className="text-xl" />
                 </button>
-              )}
+                {config.welcomeImage && (
+                  <button 
+                    onClick={() => removeImage('welcome')}
+                    className="px-4 bg-red-500/5 border border-red-500/10 rounded-xl text-red-500/60 hover:text-red-500 hover:bg-red-500/10 transition-all"
+                    title="Remove Image"
+                  >
+                    <HiTrash className="text-xl" />
+                  </button>
+                )}
+              </div>
+              <label className="flex items-center cursor-pointer gap-3 mt-4">
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={config.welcomeGifMode} onChange={(e) => setConfig({ ...config, welcomeGifMode: e.target.checked })} />
+                  <div className={`block w-12 h-6 rounded-full transition-colors ${config.welcomeGifMode ? 'bg-discord' : 'bg-gray-700'}`}></div>
+                  <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${config.welcomeGifMode ? 'transform translate-x-6' : ''}`}></div>
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Enable Animated GIF Support</span>
+              </label>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Text Color</label>
+              <div className="flex items-center gap-4">
+                <input
+                  type="color"
+                  value={config.textColor}
+                  onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
+                  className="w-12 h-12 rounded-xl border border-white/10 bg-transparent cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={config.textColor}
+                  onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
+                  className="flex-1 bg-[#050608] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-discord transition-all shadow-inner"
+                />
+              </div>
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Text Color</label>
+        </div>
+
+        <div className="pt-8 border-t border-white/5">
+          <h2 className="text-2xl font-bold text-white mb-6">Left Visuals</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide">Background Visual (URL or Upload)</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={config.goodbyeImage}
+                  onChange={(e) => setConfig({ ...config, goodbyeImage: e.target.value })}
+                  className="flex-1 bg-[#050608] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-discord transition-all shadow-inner"
+                  placeholder="https://example.com/goodbye.png"
+                />
+                <input type="file" ref={leftInputRef} onChange={(e) => handleUpload(e, 'left')} className="hidden" accept="image/*,.gif" />
+                <button 
+                  onClick={() => leftInputRef.current.click()}
+                  className="px-4 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                  title="Upload Image"
+                >
+                  <HiCloudArrowUp className="text-xl" />
+                </button>
+                {config.goodbyeImage && (
+                  <button 
+                    onClick={() => removeImage('left')}
+                    className="px-4 bg-red-500/5 border border-red-500/10 rounded-xl text-red-500/60 hover:text-red-500 hover:bg-red-500/10 transition-all"
+                    title="Remove Image"
+                  >
+                    <HiTrash className="text-xl" />
+                  </button>
+                )}
+              </div>
+              <label className="flex items-center cursor-pointer gap-3 mt-4">
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={config.goodbyeGifMode} onChange={(e) => setConfig({ ...config, goodbyeGifMode: e.target.checked })} />
+                  <div className={`block w-12 h-6 rounded-full transition-colors ${config.goodbyeGifMode ? 'bg-discord' : 'bg-gray-700'}`}></div>
+                  <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${config.goodbyeGifMode ? 'transform translate-x-6' : ''}`}></div>
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Enable Animated GIF Support</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
             <div className="flex items-center gap-4">
               <input
                 type="color"

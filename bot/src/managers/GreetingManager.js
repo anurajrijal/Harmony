@@ -33,10 +33,12 @@ class GreetingManager {
     const canvas = createCanvas(800, 300);
     const ctx = canvas.getContext('2d');
 
+    const imageToUse = type === 'welcome' ? settings.welcomeImage : settings.goodbyeImage;
+
     if (!transparent) {
       try {
         // 1. Draw Background
-        const background = await loadImage(settings.backgroundImage);
+        const background = await loadImage(imageToUse || settings.backgroundImage);
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
       } catch (e) {
         // Fallback if URL is invalid
@@ -100,14 +102,15 @@ class GreetingManager {
     if (!channel) return;
 
     const text = settings.welcomeMessage.replace(/@user/gi, `<@${member.id}>`);
-    const isGif = settings.useGifMode && settings.backgroundImage.endsWith('.gif');
+    const welcomeImg = settings.welcomeImage || settings.backgroundImage;
+    const isGif = settings.welcomeGifMode && welcomeImg?.endsWith('.gif');
     const attachment = await this.createGreetingCard(member, settings, 'welcome', isGif);
 
     if (isGif) {
       const { EmbedBuilder } = require('discord.js');
       const embed = new EmbedBuilder()
         .setDescription(text)
-        .setImage(settings.backgroundImage)
+        .setImage(welcomeImg)
         .setThumbnail('attachment://greeting.png')
         .setColor(settings.textColor || 0x5865F2);
       
@@ -125,14 +128,15 @@ class GreetingManager {
     if (!channel) return;
 
     const text = settings.goodbyeMessage.replace(/@user/gi, `**${member.user.username}**`);
-    const isGif = settings.useGifMode && settings.backgroundImage.endsWith('.gif');
+    const goodbyeImg = settings.goodbyeImage || settings.backgroundImage;
+    const isGif = settings.goodbyeGifMode && goodbyeImg?.endsWith('.gif');
     const attachment = await this.createGreetingCard(member, settings, 'goodbye', isGif);
 
     if (isGif) {
       const { EmbedBuilder } = require('discord.js');
       const embed = new EmbedBuilder()
         .setDescription(text)
-        .setImage(settings.backgroundImage)
+        .setImage(goodbyeImg)
         .setThumbnail('attachment://greeting.png')
         .setColor(settings.textColor || 0xFF0000);
       

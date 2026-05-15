@@ -294,7 +294,17 @@ export default function MusicPanel() {
               <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
               Stream Queue
             </h2>
-            <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">{queue.tracks?.length || 0} Tracks</span>
+            <div className="flex items-center gap-3">
+              <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">{queue.tracks?.length || 0} Tracks</span>
+              {queue.tracks?.length > 1 && (
+                <button 
+                  onClick={() => sendControl('clear')}
+                  className="text-[9px] font-black text-red-500/60 hover:text-red-500 uppercase tracking-widest bg-red-500/5 hover:bg-red-500/10 px-2 py-1 rounded transition-all cursor-pointer"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar flex flex-col gap-3">

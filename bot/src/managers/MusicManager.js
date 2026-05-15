@@ -436,6 +436,19 @@ class MusicManager {
     this._emitQueueUpdate(guildId);
   }
 
+  clear(guildId) {
+    const queue = this.queues.get(guildId);
+    if (!queue || !queue.tracks.length) return;
+    
+    // Keep only the current playing track
+    const currentTrack = queue.tracks[queue.currentIndex];
+    queue.tracks = [currentTrack];
+    queue.currentIndex = 0;
+    
+    this._emitQueueUpdate(guildId);
+    console.log(`🧹 [Music] Queue cleared for guild: ${guildId}`);
+  }
+
   setVolume(guildId, volume) {
     const queue = this.queues.get(guildId);
     if (queue) {

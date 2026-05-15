@@ -56,9 +56,10 @@ socket.on('music-control', async (data) => {
       case 'addToPlaylist': await musicManager.addToPlaylistFromDashboard(guildId, controlData); break;
       case 'pause': musicManager.pause(guildId); break;
       case 'resume': musicManager.resume(guildId); break;
-      case 'skip': await musicManager.skip(guildId); break;
-      case 'stop': musicManager.stop(guildId); break;
-      case 'volume': musicManager.setVolume(guildId, controlData.volume); break;
+       case 'skip': await musicManager.skip(guildId); break;
+       case 'stop': musicManager.stop(guildId); break;
+       case 'clear': musicManager.clear(guildId); break;
+       case 'volume': musicManager.setVolume(guildId, controlData.volume); break;
     }
   } catch (err) {
     console.error(`[Music Control] Error:`, err.message);
