@@ -29,23 +29,25 @@ class GreetingManager {
     return null;
   }
 
-  async createGreetingCard(member, settings, type) {
+  async createGreetingCard(member, settings, type, transparent = false) {
     const canvas = createCanvas(800, 300);
     const ctx = canvas.getContext('2d');
 
-    try {
-      // 1. Draw Background
-      const background = await loadImage(settings.backgroundImage);
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-    } catch (e) {
-      // Fallback if URL is invalid
-      ctx.fillStyle = '#23272A';
+    if (!transparent) {
+      try {
+        // 1. Draw Background
+        const background = await loadImage(settings.backgroundImage);
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+      } catch (e) {
+        // Fallback if URL is invalid
+        ctx.fillStyle = '#23272A';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // 2. Add slight dimming overlay to make text pop
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-
-    // 2. Add slight dimming overlay to make text pop
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // 3. Draw Avatar
     ctx.save(); // Save state before clipping
@@ -98,9 +100,10 @@ class GreetingManager {
     if (!channel) return;
 
     const text = settings.welcomeMessage.replace(/@user/gi, `<@${member.id}>`);
-    const attachment = await this.createGreetingCard(member, settings, 'welcome');
+    const isGif = settings.useGifMode && settings.backgroundImage.endsWith('.gif');
+    const attachment = await this.createGreetingCard(member, settings, 'welcome', isGif);
 
-    if (settings.useGifMode && settings.backgroundImage.endsWith('.gif')) {
+    if (isGif) {
       const { EmbedBuilder } = require('discord.js');
       const embed = new EmbedBuilder()
         .setDescription(text)
@@ -122,9 +125,10 @@ class GreetingManager {
     if (!channel) return;
 
     const text = settings.goodbyeMessage.replace(/@user/gi, `**${member.user.username}**`);
-    const attachment = await this.createGreetingCard(member, settings, 'goodbye');
+    const isGif = settings.useGifMode && settings.backgroundImage.endsWith('.gif');
+    const attachment = await this.createGreetingCard(member, settings, 'goodbye', isGif);
 
-    if (settings.useGifMode && settings.backgroundImage.endsWith('.gif')) {
+    if (isGif) {
       const { EmbedBuilder } = require('discord.js');
       const embed = new EmbedBuilder()
         .setDescription(text)
