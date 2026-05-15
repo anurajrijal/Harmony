@@ -305,23 +305,43 @@ export default function Greetings() {
         </div>
       </div>
       
-      {/* Preview Container */}
-      <div className="mt-8 overflow-x-auto w-full custom-scrollbar pb-4">
-        <div className="rounded-2xl overflow-hidden border border-white/10 w-[800px] h-[300px] mx-auto relative bg-gray-900 group shrink-0">
-          <img 
-            src={config.welcomeImage} 
-            className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" 
-            alt="Background Preview" 
-          />
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute inset-0 flex items-center p-12 gap-8">
-            <div className="w-[150px] h-[150px] rounded-full bg-discord border-4 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>
-              <img src="https://cdn.discordapp.com/embed/avatars/0.png" className="w-full h-full object-cover" alt="Avatar" />
+      {/* Preview Section */}
+      <div className="space-y-6">
+        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Live Studio Previews</h2>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 overflow-x-auto custom-scrollbar pb-4">
+          {/* Welcome Preview */}
+          <div className="space-y-4 min-w-[500px]">
+            <span className="text-[9px] font-black uppercase tracking-widest text-green-500 bg-green-500/10 px-2 py-0.5 rounded">Welcome Signal</span>
+            <div className="rounded-2xl overflow-hidden border border-white/10 aspect-[800/300] relative bg-gray-900 group shadow-2xl">
+              <img src={config.welcomeImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Welcome Background" />
+              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute inset-0 flex items-center p-8 gap-6">
+                <div className="w-[100px] h-[100px] rounded-full bg-discord border-2 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>
+                  <img src="https://cdn.discordapp.com/embed/avatars/0.png" className="w-full h-full object-cover" alt="Avatar" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-lg font-bold tracking-widest drop-shadow-lg uppercase" style={{ color: config.textColor }}>Welcome to the server</h2>
+                  <h1 className="text-2xl font-black tracking-wider drop-shadow-xl" style={{ color: config.textColor }}>USER</h1>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-bold tracking-widest drop-shadow-lg" style={{ color: config.textColor }}>WELCOME TO THE SERVER</h2>
-              <h1 className="text-4xl font-black tracking-wider drop-shadow-xl" style={{ color: config.textColor }}>USER</h1>
-              <p className="text-xl font-medium tracking-wider drop-shadow-md opacity-90" style={{ color: config.textColor }}>Member #123</p>
+          </div>
+
+          {/* Goodbye Preview */}
+          <div className="space-y-4 min-w-[500px]">
+            <span className="text-[9px] font-black uppercase tracking-widest text-red-500 bg-red-500/10 px-2 py-0.5 rounded">Departure Signal</span>
+            <div className="rounded-2xl overflow-hidden border border-white/10 aspect-[800/300] relative bg-gray-900 group shadow-2xl">
+              <img src={config.goodbyeImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Goodbye Background" />
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute inset-0 flex items-center p-8 gap-6">
+                <div className="w-[100px] h-[100px] rounded-full bg-red-500/20 border-2 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>
+                  <img src="https://cdn.discordapp.com/embed/avatars/0.png" className="w-full h-full object-cover grayscale" alt="Avatar" />
+                </div>
+                <div className="flex-1">
+                  <h1 className="text-2xl font-black tracking-wider drop-shadow-xl mb-1" style={{ color: config.textColor }}>GOODBYE, USER</h1>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60" style={{ color: config.textColor }}>We hope to see you again soon</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
