@@ -284,7 +284,7 @@ export default function MusicPanel() {
 
         {/* Right Column: Queue */}
         <motion.div 
-          className="bg-[#0b0c10]/40 backdrop-blur-xl border border-white/5 rounded-xl p-8 flex flex-col h-[580px] sticky top-8"
+          className="bg-[#0b0c10]/40 backdrop-blur-xl border border-white/5 rounded-xl p-8 flex flex-col h-[460px] sticky top-8"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
