@@ -196,9 +196,9 @@ export default function Greetings() {
                    <img src="https://cdn.discordapp.com/embed/avatars/0.png" className="w-full h-full object-cover" alt="Avatar" />
                 </div>
                 <div className="flex flex-col gap-2">
-                   <h2 className="text-4xl font-bold tracking-widest drop-shadow-lg" style={{ color: config.textColor }}>WELCOME TO THE SERVER</h2>
-                   <h1 className="text-5xl font-black tracking-wider drop-shadow-xl" style={{ color: config.textColor }}>USER</h1>
-                   <p className="text-2xl font-medium tracking-wider drop-shadow-md opacity-90" style={{ color: config.textColor }}>Member #123</p>
+                   <h2 className="text-2xl font-bold tracking-widest drop-shadow-lg" style={{ color: config.textColor }}>WELCOME TO THE SERVER</h2>
+                   <h1 className="text-4xl font-black tracking-wider drop-shadow-xl" style={{ color: config.textColor }}>USER</h1>
+                   <p className="text-xl font-medium tracking-wider drop-shadow-md opacity-90" style={{ color: config.textColor }}>Member #123</p>
                 </div>
              </div>
           </div>

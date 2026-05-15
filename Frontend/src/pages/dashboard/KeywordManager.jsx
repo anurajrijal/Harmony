@@ -112,7 +112,7 @@ export default function KeywordManager() {
             placeholder="Search Intelligence Database..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full h-14 bg-[#0b0c10]/60 border border-white/10 rounded-xl pl-12 pr-5 text-[13px] font-bold text-white placeholder-gray-600 focus:outline-none focus:border-discord focus:bg-[#0b0c10] transition-all shadow-inner"
+            className="w-full bg-[#0b0c10]/60 border border-white/10 rounded-xl py-4 pl-12 pr-5 text-[13px] font-bold text-white placeholder-gray-600 focus:outline-none focus:border-discord focus:bg-[#0b0c10] transition-all shadow-inner leading-normal"
           />
         </div>
       </div>
@@ -151,8 +151,8 @@ export default function KeywordManager() {
                 
                 <div className="flex items-start justify-between mb-8 relative z-10">
                   <div className="flex flex-col gap-2">
-                    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-discord mb-1">Trigger Signal</span>
-                    <span className="font-mono text-[11px] font-black bg-discord/10 text-discord px-4 py-2 rounded-xl border border-discord/20 truncate max-w-[180px]">
+                    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-discord mb-1 leading-normal">Trigger Signal</span>
+                    <span className="font-mono text-[11px] font-black bg-discord/10 text-discord px-4 py-2 rounded-xl border border-discord/20 truncate max-w-[180px] leading-normal">
                       {kw.keyword}
                     </span>
                   </div>
@@ -170,7 +170,7 @@ export default function KeywordManager() {
                 </div>
 
                 <div className="flex-1 mb-8 relative z-10">
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-600 mb-3 block">Neural Response</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-600 mb-3 block leading-normal">Neural Response</span>
                   <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 group-hover:border-white/10 transition-colors">
                     <p className="text-xs text-gray-400 leading-relaxed line-clamp-3 italic font-medium">
                       "{kw.response}"
