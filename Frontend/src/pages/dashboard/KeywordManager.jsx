@@ -72,7 +72,7 @@ export default function KeywordManager() {
   );
 
   return (
-    <div className="space-y-10">
+    <div className="flex flex-col gap-10">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <motion.div 
@@ -145,7 +145,7 @@ export default function KeywordManager() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
                 whileHover={{ y: -8, backgroundColor: 'rgba(255,255,255,0.02)' }}
-                className={`bg-[#0b0c10]/40 backdrop-blur-xl border ${kw.enabled ? 'border-white/5' : 'border-red-500/10 opacity-60'} rounded-xl p-8 flex flex-col relative overflow-hidden transition-all group`}
+                className={`bg-[#0b0c10]/40 backdrop-blur-xl border ${kw.enabled ? 'border-white/5' : 'border-red-500/10 opacity-60'} rounded-xl p-10 min-h-[260px] flex flex-col relative overflow-hidden transition-all group`}
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-discord/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
@@ -170,8 +170,8 @@ export default function KeywordManager() {
                 </div>
 
                 <div className="flex-1 mb-8 relative z-10">
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-600 mb-3 block leading-normal">Neural Response</span>
-                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 group-hover:border-white/10 transition-colors">
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-600 mb-4 block leading-normal">Neural Response</span>
+                  <div className="p-6 min-h-[100px] rounded-xl bg-white/[0.02] border border-white/5 group-hover:border-white/10 transition-colors">
                     <p className="text-xs text-gray-400 leading-relaxed line-clamp-3 italic font-medium">
                       "{kw.response}"
                     </p>
