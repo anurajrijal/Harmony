@@ -115,26 +115,31 @@ client.on(Events.InteractionCreate, async (interaction) => {
         await interaction.reply(`🔊 Volume set to ${vol}%`);
         break;
       case 'help':
+        await interaction.deferReply();
         const helpEmbed = {
           title: '🛡️ Harmony Core Tactical brief',
           description: 'Synthesizing available command protocols for this sector.',
           color: 0x5865F2,
           fields: [
             { name: '🎵 Acoustic Studio', value: '`/play`, `/pause`, `/resume`, `/skip`, `/stop`, `/queue`, `/volume`, `/playlist list`, `/playlist play`' },
-            { name: '🧠 Intelligence Hub', value: 'Auto-replies are active. Manage keywords via the [Dashboard](http://localhost:5173).' },
+            { name: '🧠 Intelligence Hub', value: 'Auto-replies are active. Manage keywords via the [Dashboard](https://harmony-three-delta.vercel.app).' },
             { name: '🔒 Security HQ', value: 'Reaction roles and automation are active. Manage via the dashboard.' }
           ],
           footer: { text: 'Harmony Core v1.2 | Operational Status: Green' },
           timestamp: new Date().toISOString()
         };
-        await interaction.reply({ embeds: [helpEmbed] });
+        await interaction.editReply({ embeds: [helpEmbed] });
         break;
     }
   } catch (error) {
-    console.error(`[Command Error] ${commandName}:`, error.message);
-    const reply = { content: '❌ An error occurred', ephemeral: true };
-    if (interaction.replied || interaction.deferred) await interaction.followUp(reply);
-    else await interaction.reply(reply);
+    console.error(`[Command Error] ${commandName}:`, error);
+    const reply = { content: '❌ An error occurred', flags: [4096] }; // 4096 is Ephemeral flag
+    try {
+      if (interaction.replied || interaction.deferred) await interaction.followUp(reply);
+      else await interaction.reply(reply);
+    } catch (e) {
+      console.error('[Error] Could not send error reply:', e.message);
+    }
   }
 });
 

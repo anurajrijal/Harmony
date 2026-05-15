@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
-import { motion } from 'framer-motion';
-import CustomSelect from '../../components/CustomSelect';
-
-const API = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+import api from '../../utils/api.js';
 
 export default function Greetings() {
   const { guildId } = useParams();
@@ -27,7 +22,7 @@ export default function Greetings() {
       try {
         // Fetch channels safely
         try {
-          const channelsRes = await axios.get(`${API}/api/guilds/${guildId}/channels`, { withCredentials: true });
+          const channelsRes = await api.get(`/api/guilds/${guildId}/channels`);
           if (channelsRes.data.success) {
             setChannels(channelsRes.data.channels.filter(c => c.type === 0)); // Text channels
           }
@@ -38,7 +33,7 @@ export default function Greetings() {
 
         // Fetch greetings safely
         try {
-          const configRes = await axios.get(`${API}/api/greetings?guildId=${guildId}`, { withCredentials: true });
+          const configRes = await api.get(`/api/greetings?guildId=${guildId}`);
           if (configRes.data.success && configRes.data.config) {
             setConfig(prev => ({ ...prev, ...configRes.data.config }));
           }
@@ -56,7 +51,7 @@ export default function Greetings() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.post(`${API}/api/greetings`, { guildId, ...config }, { withCredentials: true });
+      await api.post(`/api/greetings`, { guildId, ...config });
       toast.success('Greetings settings saved!');
     } catch (err) {
       toast.error('Failed to save settings');
