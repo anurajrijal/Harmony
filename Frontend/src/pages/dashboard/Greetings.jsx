@@ -304,7 +304,6 @@ export default function Greetings() {
           </div>
         </div>
       </div>
-      </div>
       
       {/* Preview Container */}
       <div className="mt-8 overflow-x-auto w-full custom-scrollbar pb-4">
