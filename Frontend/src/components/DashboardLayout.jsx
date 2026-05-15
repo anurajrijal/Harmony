@@ -14,6 +14,7 @@ const navItems = [
   { path: 'music', icon: HiMusicalNote, label: 'Music Studio' },
   { path: 'keywords', icon: HiChatBubbleLeftRight, label: 'Intelligence Hub' },
   { path: 'roles', icon: HiShieldCheck, label: 'Security HQ' },
+  { path: 'greetings', icon: HiDocumentText, label: 'Greetings' },
   { path: 'commands', icon: HiCommandLine, label: 'Command Directory' },
   { path: 'logs', icon: HiDocumentText, label: 'Activity Logs' },
   { path: 'settings', icon: HiCog6Tooth, label: 'System Config' },

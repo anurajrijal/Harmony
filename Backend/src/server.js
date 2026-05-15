@@ -27,6 +27,7 @@ const musicRoutes = require("./routes/music");
 const logRoutes = require("./routes/logs");
 const settingsRoutes = require("./routes/settings");
 const playlistRoutes = require("./routes/playlists");
+const greetingRoutes = require("./routes/greetings");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -75,6 +76,7 @@ app.use("/api/music", musicRoutes);
 app.use("/api/logs", logRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/playlists", playlistRoutes);
+app.use("/api/greetings", greetingRoutes);
 
 // Health check
 app.get("/health", (req, res) => {

@@ -13,6 +13,7 @@ import KeywordManager from './pages/dashboard/KeywordManager.jsx';
 import RoleManager from './pages/dashboard/RoleManager.jsx';
 import LogsViewer from './pages/dashboard/LogsViewer.jsx';
 import Settings from './pages/dashboard/Settings.jsx';
+import Greetings from './pages/dashboard/Greetings.jsx';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -53,6 +54,7 @@ export default function App() {
             <Route index element={<Overview />} />
             <Route path="music" element={<MusicPanel />} />
             <Route path="keywords" element={<KeywordManager />} />
+            <Route path="greetings" element={<Greetings />} />
             <Route path="roles" element={<RoleManager />} />
             <Route path="commands" element={<CommandsGuide />} />
             <Route path="logs" element={<LogsViewer />} />

@@ -4,6 +4,7 @@ const { io: SocketClient } = require('socket.io-client');
 const MusicManager = require('./managers/MusicManager');
 const KeywordManager = require('./managers/KeywordManager');
 const RoleManager = require('./managers/RoleManager');
+const GreetingManager = require('./managers/GreetingManager');
 const { registerCommands } = require('./commands');
 const ffmpeg = require('ffmpeg-static');
 const play = require('play-dl');
@@ -44,6 +45,7 @@ socket.on('disconnect', () => console.log('⚡ Disconnected from backend'));
 const musicManager = new MusicManager(client, socket);
 const keywordManager = new KeywordManager(client, socket);
 const roleManager = new RoleManager(client, socket);
+const greetingManager = new GreetingManager(client, socket);
 
 // Listen for dashboard music controls
 socket.on('music-control', async (data) => {
@@ -133,7 +135,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
 client.on(Events.MessageCreate, async (m) => { if (!m.author.bot) await keywordManager.handleMessage(m); });
 client.on(Events.MessageReactionAdd, async (r, u) => { if (!u.bot) await roleManager.handleReactionAdd(r, u); });
 client.on(Events.MessageReactionRemove, async (r, u) => { if (!u.bot) await roleManager.handleReactionRemove(r, u); });
-client.on(Events.GuildMemberAdd, async (m) => await roleManager.handleMemberJoin(m));
+client.on(Events.GuildMemberAdd, async (m) => {
+  await roleManager.handleMemberJoin(m);
+  await greetingManager.handleMemberAdd(m);
+});
+client.on(Events.GuildMemberRemove, async (m) => await greetingManager.handleMemberRemove(m));
 client.on(Events.GuildCreate, async (g) => { syncGuild(g); socket.emit('bot-status', { status: 'online', guilds: client.guilds.cache.size }); });
 
 client.on('error', console.error);
