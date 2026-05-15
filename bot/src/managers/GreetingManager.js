@@ -103,7 +103,8 @@ class GreetingManager {
 
     const text = settings.welcomeMessage.replace(/@user/gi, `<@${member.id}>`);
     const welcomeImg = settings.welcomeImage || settings.backgroundImage;
-    const isGif = settings.welcomeGifMode && (welcomeImg?.toLowerCase().includes('.gif') || welcomeImg?.includes('image/gif'));
+    // Auto-detect GIF even if toggle is off, but respect toggle if user wants to force it
+    const isGif = (settings.welcomeGifMode || welcomeImg?.toLowerCase().includes('.gif')) && welcomeImg;
     const attachment = await this.createGreetingCard(member, settings, 'welcome', isGif);
 
     if (isGif) {
@@ -131,7 +132,8 @@ class GreetingManager {
 
     const text = settings.goodbyeMessage.replace(/@user/gi, `**${member.user.username}**`);
     const goodbyeImg = settings.goodbyeImage || settings.backgroundImage;
-    const isGif = settings.goodbyeGifMode && (goodbyeImg?.toLowerCase().includes('.gif') || goodbyeImg?.includes('image/gif'));
+    // Auto-detect GIF even if toggle is off
+    const isGif = (settings.goodbyeGifMode || goodbyeImg?.toLowerCase().includes('.gif')) && goodbyeImg;
     const attachment = await this.createGreetingCard(member, settings, 'goodbye', isGif);
 
     if (isGif) {
