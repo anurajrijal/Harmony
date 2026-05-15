@@ -107,14 +107,16 @@ class GreetingManager {
     const attachment = await this.createGreetingCard(member, settings, 'welcome', isGif);
 
     if (isGif) {
-      const { EmbedBuilder } = require('discord.js');
+      const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
+      const gifAttachment = new AttachmentBuilder(welcomeImg, { name: 'welcome.gif' });
+      
       const embed = new EmbedBuilder()
         .setDescription(text)
-        .setImage(welcomeImg)
+        .setImage('attachment://welcome.gif')
         .setThumbnail('attachment://greeting.png')
         .setColor(settings.textColor || 0x5865F2);
       
-      await channel.send({ embeds: [embed], files: [attachment] });
+      await channel.send({ embeds: [embed], files: [attachment, gifAttachment] });
     } else {
       await channel.send({ content: text, files: [attachment] });
     }
@@ -133,14 +135,16 @@ class GreetingManager {
     const attachment = await this.createGreetingCard(member, settings, 'goodbye', isGif);
 
     if (isGif) {
-      const { EmbedBuilder } = require('discord.js');
+      const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
+      const gifAttachment = new AttachmentBuilder(goodbyeImg, { name: 'goodbye.gif' });
+      
       const embed = new EmbedBuilder()
         .setDescription(text)
-        .setImage(goodbyeImg)
+        .setImage('attachment://goodbye.gif')
         .setThumbnail('attachment://greeting.png')
         .setColor(settings.textColor || 0xFF0000);
       
-      await channel.send({ embeds: [embed], files: [attachment] });
+      await channel.send({ embeds: [embed], files: [attachment, gifAttachment] });
     } else {
       await channel.send({ content: text, files: [attachment] });
     }
