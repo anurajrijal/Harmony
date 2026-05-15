@@ -44,7 +44,16 @@ export default function Greetings() {
         try {
           const configRes = await api.get(`/api/greetings?guildId=${guildId}`);
           if (configRes.data.success && configRes.data.config) {
-            setConfig(prev => ({ ...prev, ...configRes.data.config }));
+            const data = configRes.data.config;
+            // Bridge: If new fields are missing but old one exists, use the old one
+            setConfig(prev => ({ 
+              ...prev, 
+              ...data,
+              welcomeImage: data.welcomeImage || data.backgroundImage || prev.welcomeImage,
+              goodbyeImage: data.goodbyeImage || data.backgroundImage || prev.goodbyeImage,
+              welcomeGifMode: data.welcomeGifMode ?? data.useGifMode ?? prev.welcomeGifMode,
+              goodbyeGifMode: data.goodbyeGifMode ?? data.useGifMode ?? prev.goodbyeGifMode
+            }));
           }
         } catch (err) {
           console.error("Failed to load greetings", err);
@@ -313,7 +322,11 @@ export default function Greetings() {
           <div className="space-y-4 min-w-[500px]">
             <span className="text-[9px] font-black uppercase tracking-widest text-green-500 bg-green-500/10 px-2 py-0.5 rounded">Welcome Signal</span>
             <div className="rounded-2xl overflow-hidden border border-white/10 aspect-[800/300] relative bg-gray-900 group shadow-2xl">
-              <img src={config.welcomeImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Welcome Background" />
+              {config.welcomeImage ? (
+                <img src={config.welcomeImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Welcome Background" />
+              ) : (
+                <div className="w-full h-full bg-gray-800 flex items-center justify-center text-gray-600 uppercase text-[10px] font-bold tracking-widest">No Welcome Asset</div>
+              )}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute inset-0 flex items-center p-8 gap-6">
                 <div className="w-[100px] h-[100px] rounded-full bg-discord border-2 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>
@@ -331,7 +344,11 @@ export default function Greetings() {
           <div className="space-y-4 min-w-[500px]">
             <span className="text-[9px] font-black uppercase tracking-widest text-red-500 bg-red-500/10 px-2 py-0.5 rounded">Departure Signal</span>
             <div className="rounded-2xl overflow-hidden border border-white/10 aspect-[800/300] relative bg-gray-900 group shadow-2xl">
-              <img src={config.goodbyeImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Goodbye Background" />
+              {config.goodbyeImage ? (
+                <img src={config.goodbyeImage} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" alt="Goodbye Background" />
+              ) : (
+                <div className="w-full h-full bg-gray-800 flex items-center justify-center text-gray-600 uppercase text-[10px] font-bold tracking-widest">No Departure Asset</div>
+              )}
               <div className="absolute inset-0 bg-black/20" />
               <div className="absolute inset-0 flex items-center p-8 gap-6">
                 <div className="w-[100px] h-[100px] rounded-full bg-red-500/20 border-2 border-white shrink-0 overflow-hidden shadow-2xl" style={{ borderColor: config.textColor }}>

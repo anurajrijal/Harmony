@@ -29,4 +29,26 @@ router.post('/control', authenticate, async (req, res) => {
   }
 });
 
+// POST /api/music/sync - Bot updates the queue state in DB
+router.post('/sync', async (req, res) => {
+  try {
+    const { guildId, tracks, currentIndex, isPlaying } = req.body;
+    const botApiKey = req.headers['x-bot-api-key'];
+
+    if (botApiKey !== process.env.BOT_API_KEY) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    await MusicQueue.findOneAndUpdate(
+      { guildId },
+      { tracks, currentIndex, isPlaying, lastUpdated: new Date() },
+      { upsert: true, new: true }
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 module.exports = router;

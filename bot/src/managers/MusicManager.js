@@ -472,14 +472,27 @@ class MusicManager {
     await interaction.reply({ embeds: [{ title: '🎶 Music Deck', description, color: 0x5865F2 }] });
   }
 
-  _emitQueueUpdate(guildId) {
+  async _emitQueueUpdate(guildId) {
     const queue = this.getQueue(guildId);
-    this.socket.emit('queue-update', {
+    const data = {
       guildId,
       tracks: queue?.tracks || [],
       currentIndex: queue?.currentIndex || 0,
       isPlaying: queue?.isPlaying || false,
-    });
+    };
+
+    // Emit live update to dashboard
+    this.socket.emit('queue-update', data);
+
+    // Sync to database for persistence on reload
+    try {
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      await axios.post(`${backendUrl}/api/music/sync`, data, {
+        headers: { 'x-bot-api-key': process.env.BOT_API_KEY }
+      });
+    } catch (err) {
+      console.error('[Music Sync] Failed to sync with DB:', err.message);
+    }
   }
 
   async listPlaylists(interaction) {
