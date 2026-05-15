@@ -23,13 +23,13 @@ router.get('/', async (req, res) => {
 // Update greetings config
 router.post('/', async (req, res) => {
   try {
-    const { guildId, enabled, welcomeChannelId, welcomeMessage, goodbyeChannelId, goodbyeMessage, backgroundImage, textColor } = req.body;
+    const { guildId, enabled, welcomeChannelId, welcomeMessage, goodbyeChannelId, goodbyeMessage, backgroundImage, textColor, useGifMode } = req.body;
     
     if (!guildId) return res.status(400).json({ success: false, message: 'guildId is required' });
 
     const config = await Greeting.findOneAndUpdate(
       { guildId },
-      { enabled, welcomeChannelId, welcomeMessage, goodbyeChannelId, goodbyeMessage, backgroundImage, textColor },
+      { enabled, welcomeChannelId, welcomeMessage, goodbyeChannelId, goodbyeMessage, backgroundImage, textColor, useGifMode },
       { new: true, upsert: true }
     );
 

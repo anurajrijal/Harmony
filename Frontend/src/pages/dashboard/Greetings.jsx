@@ -19,6 +19,7 @@ export default function Greetings() {
     goodbyeMessage: '@user has left the server.',
     backgroundImage: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop',
     textColor: '#FFFFFF',
+    useGifMode: false,
   });
 
   useEffect(() => {
@@ -192,6 +193,20 @@ export default function Greetings() {
               />
             </div>
           </div>
+        </div>
+        
+        <div className="p-6 bg-discord/5 rounded-2xl border border-discord/10 mt-6">
+          <label className="flex items-center cursor-pointer gap-4">
+            <div className="relative">
+              <input type="checkbox" className="sr-only" checked={config.useGifMode} onChange={(e) => setConfig({ ...config, useGifMode: e.target.checked })} />
+              <div className={`block w-14 h-8 rounded-full transition-colors ${config.useGifMode ? 'bg-discord' : 'bg-gray-700'}`}></div>
+              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform ${config.useGifMode ? 'transform translate-x-6' : ''}`}></div>
+            </div>
+            <div>
+              <span className="text-sm font-bold uppercase tracking-widest text-white">Animated GIF Backgrounds</span>
+              <p className="text-[10px] text-gray-400 mt-1 italic">Enable this to support .gif files. Your card will become a thumbnail while the GIF plays in full!</p>
+            </div>
+          </label>
         </div>
         
         {/* Preview Container */}

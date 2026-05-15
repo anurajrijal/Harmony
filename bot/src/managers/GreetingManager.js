@@ -100,7 +100,18 @@ class GreetingManager {
     const text = settings.welcomeMessage.replace(/@user/gi, `<@${member.id}>`);
     const attachment = await this.createGreetingCard(member, settings, 'welcome');
 
-    await channel.send({ content: text, files: [attachment] });
+    if (settings.useGifMode && settings.backgroundImage.endsWith('.gif')) {
+      const { EmbedBuilder } = require('discord.js');
+      const embed = new EmbedBuilder()
+        .setDescription(text)
+        .setImage(settings.backgroundImage)
+        .setThumbnail('attachment://greeting.png')
+        .setColor(settings.textColor || 0x5865F2);
+      
+      await channel.send({ embeds: [embed], files: [attachment] });
+    } else {
+      await channel.send({ content: text, files: [attachment] });
+    }
   }
 
   async handleMemberRemove(member) {
@@ -113,7 +124,18 @@ class GreetingManager {
     const text = settings.goodbyeMessage.replace(/@user/gi, `**${member.user.username}**`);
     const attachment = await this.createGreetingCard(member, settings, 'goodbye');
 
-    await channel.send({ content: text, files: [attachment] });
+    if (settings.useGifMode && settings.backgroundImage.endsWith('.gif')) {
+      const { EmbedBuilder } = require('discord.js');
+      const embed = new EmbedBuilder()
+        .setDescription(text)
+        .setImage(settings.backgroundImage)
+        .setThumbnail('attachment://greeting.png')
+        .setColor(settings.textColor || 0xFF0000);
+      
+      await channel.send({ embeds: [embed], files: [attachment] });
+    } else {
+      await channel.send({ content: text, files: [attachment] });
+    }
   }
 }
 
