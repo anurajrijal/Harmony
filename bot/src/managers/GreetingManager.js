@@ -2,7 +2,7 @@ const { AttachmentBuilder } = require('discord.js');
 const { createCanvas, loadImage } = require('canvas');
 const axios = require('axios');
 
-const API = process.env.BACKEND_URL || 'http://localhost:3001';
+const API = (process.env.BACKEND_URL || 'http://localhost:3001').replace(/\/$/, '');
 
 class GreetingManager {
   constructor(client, socket) {

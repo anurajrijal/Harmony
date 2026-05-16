@@ -101,7 +101,19 @@ cd Frontend
 npm run build
 ```
 
-### Start with PM2
+### Start with PM2 (Recommended for VPS)
+
+You can start both the Backend and Bot simultaneously using the provided `ecosystem.config.js` file:
+
+```bash
+# From the root directory
+pm2 start ecosystem.config.js
+```
+
+This will launch two processes: `harmony-backend` and `harmony-bot`.
+
+Alternatively, you can start them individually:
+
 ```bash
 # Backend API server
 cd Backend
@@ -110,12 +122,14 @@ pm2 start src/server.js --name "bot-api"
 # Discord Bot service
 cd ../bot
 pm2 start src/bot.js --name "discord-bot"
+```
 
-# Save PM2 process list
-pm2 save
-
-# Auto-restart on system reboot
-pm2 startup
+### Manage Processes
+```bash
+pm2 status          # Check status of both
+pm2 logs            # View combined logs
+pm2 save            # Save process list for auto-restart
+pm2 startup         # Setup auto-restart on reboot
 ```
 
 ### Serve Frontend (use nginx or serve)

@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const API = process.env.BACKEND_URL || 'http://localhost:3001';
+const API = (process.env.BACKEND_URL || 'http://localhost:3001').replace(/\/$/, '');
 
 class RoleManager {
   constructor(client, socket) {

@@ -291,7 +291,7 @@ class MusicManager {
       
       if (!trackInfo) return;
 
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = (process.env.BACKEND_URL || 'http://localhost:3001').replace(/\/$/, '');
       await axios.post(`${backendUrl}/api/playlists/${data.playlistId}/tracks`, { track: trackInfo }, {
         headers: { 'x-bot-api-key': process.env.BOT_API_KEY }
       });
@@ -486,7 +486,7 @@ class MusicManager {
 
     // Sync to database for persistence on reload
     try {
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = (process.env.BACKEND_URL || 'http://localhost:3001').replace(/\/$/, '');
       await axios.post(`${backendUrl}/api/music/sync`, data, {
         headers: { 'x-bot-api-key': process.env.BOT_API_KEY }
       });
@@ -497,7 +497,7 @@ class MusicManager {
 
   async listPlaylists(interaction) {
     try {
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = (process.env.BACKEND_URL || 'http://localhost:3001').replace(/\/$/, '');
       const res = await axios.get(`${backendUrl}/api/playlists?guildId=${interaction.guildId}`, {
         headers: { 'x-bot-api-key': process.env.BOT_API_KEY }
       });
@@ -527,7 +527,7 @@ class MusicManager {
 
     try {
       await interaction.deferReply();
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = (process.env.BACKEND_URL || 'http://localhost:3001').replace(/\/$/, '');
       const res = await axios.get(`${backendUrl}/api/playlists?guildId=${interaction.guildId}`, {
         headers: { 'x-bot-api-key': process.env.BOT_API_KEY }
       });
